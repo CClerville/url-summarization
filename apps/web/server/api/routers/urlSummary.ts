@@ -13,7 +13,13 @@ export const urlSummaryRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        url: z.string().url(),
+        url: z
+          .string()
+          .url()
+          .refine(
+            (url) => url.startsWith("https://"),
+            { message: "Only HTTPS URLs are allowed" },
+          ),
         summary: z.string().optional(),
       }),
     )
